@@ -7,25 +7,12 @@ def main():
         content = file.read()
         lines = content.split()
 
-    numbers=[]
 
-    line='234234234234278'
-    line2='987654321111111'
-    print(algo_search(line2))
-
-    num=[]
-    index = 0
-    i = 0
-    while len(num)<12:
-        n, index = algo_search(line2[index+i])
-        num.append(int(n))
-        i+=1
-    print(num)
-
-    greater, index = algo_search(line2)
-    greater2, index2 = algo_search(line2[index+1:])
-    greater3, index3 = algo_search(line2[index+2:])
-    print(greater,greater2,greater3, num)
+    nums =  []
+    for line in lines:
+        nums.append(busq(line,12))
+    
+    print(sum(nums))
 
 
 def algo_search(line):
@@ -39,7 +26,21 @@ def algo_search(line):
 
     return greater, index
 
+def busq(line,reps=12):    
+    num=''
+    index = -1
 
+    while len(num)<reps:
+                
+            n, index = algo_search(line)
+            lineh=line
+            while len(line[index:]) < reps-len(num):
+                lineh=lineh.replace(n,'0')
+                n, index = algo_search(lineh)
+                
+            line = line[index+1:]
+            num+=n
+    return int(num)
 
 if __name__ == '__main__':
     main()
