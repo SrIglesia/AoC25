@@ -13,9 +13,23 @@ def main():
     line2='987654321111111'
     print(algo_search(line2))
 
+    num=[]
+    index = 0
+    i = 0
+    while len(num)<12:
+        n, index = algo_search(line2[index+i])
+        num.append(int(n))
+        i+=1
+    print(num)
+
+    greater, index = algo_search(line2)
+    greater2, index2 = algo_search(line2[index+1:])
+    greater3, index3 = algo_search(line2[index+2:])
+    print(greater,greater2,greater3, num)
+
 
 def algo_search(line):
-    greater = line[0]
+    greater = "0"
     index = 0
 
     for i in range(len(line)):
