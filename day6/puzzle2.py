@@ -1,5 +1,5 @@
 """
-Tengo que quitar los 0s de todas partes !
+Algunos me ordena bien otros no. Lo había preparado para que contara espacios y eso, pero el split me lo hace sin contar con los espacios.
 """
 
 
@@ -7,13 +7,14 @@ def main():
 
     with open('input.txt', 'r') as file:
         content = file.read().strip().split()
-    
+
+
     rows = prepare_rows(content, 5)
-    #rows = ['79','84','562', '814','+']
     result = 0
-    operations=[]
     for row in rows:
+        print(row)
         ror = prepare_matrix(row)
+        print(ror)
         matrix = mount_matrix(ror)
         operation = prepare_calculations(matrix)
         print(operation)
@@ -21,7 +22,14 @@ def main():
         print(fresult)
         result+=fresult
     print(result)
-    
+
+    """row = [' 913', ' 564', '  16', '1133', '*  ']
+    ror=prepare_matrix(row)
+    print(ror)
+    matrix = mount_matrix(ror)
+    operation = prepare_calculations(matrix)
+    print(operation)"""
+
 
 def prepare_rows(content, n):
     divisor=len(content)//n
@@ -37,20 +45,19 @@ def prepare_calculations(matrix):
     for i in range(4):
         operation = [matrix[0][-(i+1)],matrix[1][-(i+1)],matrix[2][-(i+1)],matrix[3][-(i+1)],matrix[4][-(i+1)]]
         operation = list(map(str,operation))
-        if '0' in operation:
-            operation.remove('0')
-
-        operation = int(operation[0]+operation[1]+operation[2]+operation[3])#Cambiar esto
-        operations.append(operation)
+        if operation.count('0') == len (operation):
+            continue
+        #operation = int(operation[0]+operation[1]+operation[2]+operation[3])#Cambiar esto
+        numb = []
+        numb = int(''.join([x for x in operation[:-1] if x != '0']))
+        operations.append((numb))
         i+=1
     if 0 in operations:
         operations.remove(0)
-    operations.append(matrix[4][4])
+    operations.append(matrix[4][0])
     return operations
 
 def calculate_answer(operation):
-    fresult = 0
-    print(operation)
     if operation[-1] == '*':
         result=1
         for number in operation[:-1]:
@@ -63,22 +70,28 @@ def calculate_answer(operation):
 def prepare_matrix(row):
     #long = max(len(item) for item in row)
     long = 5
-    r=[]
-
+    items = []
+    indexes=[]
+    nrw=[]
     #Rellenar los espacios al principio
     for item in row:
-        i = 0 
-        while len(item) < long:
-            index = row.index(item)
-            row.remove(item)
-            item=' '+item
-            row.insert(index, item)
-    
-    return row
+        indexes=[]
+        items = []
+        for i in range(len(item)):
+            if item[i] != ' ':
+                indexes.append(i)
+                items.append(item[i])
+        numb = ['0','0','0','0']
+        for index, digit in zip(indexes, items):
+            numb.pop(index)
+            numb.insert(index,digit)
+        numb=''.join(numb)
+        nrw.append(numb)
+    return nrw
 
 def mount_matrix(row,n=5):
     matrix = []
-    
+
     for i in range(n):
         line=[]
         for j in range(len(row[i])):
